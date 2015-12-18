@@ -4,20 +4,43 @@ using System.Collections;
 public class BurstFireBlasters : Weapon {
 
     public GameObject bullet;
-    public GameObject bulletTrail;
 
-    void Start () {
-	
-	}
-	
-	void Update () {
-	
-	}
+    public float fireRate;
 
-    public override void Fire(GameObject ship)
+    public int burstSize;
+    public float timeBetweenBursts;
+
+    private int burstCount = 0;
+    private float cooldownTimer = 0.0f;
+
+    void Start ()
     {
-        GameObject newBullet = (GameObject)Instantiate(bullet, ship.transform.position, ship.transform.rotation);
-        GameObject trail = (GameObject)Instantiate(bulletTrail, ship.transform.position, ship.transform.rotation);
-        newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * 1000);
+        burstCount = burstSize;
+	}
+	
+	void Update ()
+    {
+        cooldownTimer -= Time.deltaTime;
+	}
+
+    public override void Fire()
+    {
+        if (cooldownTimer <= 0.0f)
+        {
+            StartCoroutine("BurstFire");
+            cooldownTimer = timeBetweenBursts;
+        }
+    }
+
+    private IEnumerator BurstFire()
+    {
+        while (burstCount > 0)
+        {
+            GameObject newBullet = (GameObject)Instantiate(bullet, transform.position, transform.rotation);
+            newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * 1000);
+            --burstCount;
+            yield return new WaitForSeconds(fireRate);
+        }
+        burstCount = burstSize;
     }
 }

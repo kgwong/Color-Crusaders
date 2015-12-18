@@ -17,11 +17,11 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButton(0))
         {
-            primaryWeapon.Fire(gameObject);
+            primaryWeapon.Fire();
         }
         if (Input.GetMouseButton(1))
         {
-            secondaryWeapon.Fire(gameObject);
+            secondaryWeapon.Fire();
         }
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.S))
