@@ -1,20 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
-
-    public Weapon primaryWeapon;
-    public Weapon secondaryWeapon;
+public class PlayerController : Ship {
 
     private Rigidbody2D rigid;
 
-    public float rotationSpeed;
-
-	void Start () {
+	void Start ()
+    {
         rigid = GetComponent<Rigidbody2D>();
-	}
+        SetColor(Ship.RED);
+    }
 	
-	void Update () {
+	void Update ()
+    {
         if (Input.GetMouseButton(0))
         {
             primaryWeapon.Fire();
@@ -26,19 +24,15 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.S))
         {
-            rigid.velocity = new Vector2(rigid.velocity.x * 0.98f, rigid.velocity.y * 0.98f);            
+            Decelerate();
         }
         float rotation = Input.GetAxis("Horizontal");
         transform.Rotate(Vector3.forward * -rotation * rotationSpeed);
-        
-        
-    }
 
-    void FixedUpdate()
-    {
         if (Input.GetKey(KeyCode.W))
         {
-            rigid.AddForce(transform.up * 10f);
+            Accelerate();
         }
+        transform.Translate(Vector3.up * currSpeed * Time.deltaTime);
     }
 }
