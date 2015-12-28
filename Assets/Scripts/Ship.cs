@@ -3,8 +3,20 @@ using System.Collections;
 
 public class Ship : MonoBehaviour {
 
-    public static Color RED = new Color(1.0f, 0.128f, 0f);
+    public static Color[] COLOR_DEFINIIONS = new[] 
+    {
+        new Color(1f, 0.128f, 0f), //RED
+        new Color(1f, 1f, 1f), //WHITE
+        new Color(0, 0.297f, 1f) //BLUE
+    };
 
+    public enum ShipColor{
+        RED = 0,
+        NEUTRAL = 1,
+        BLUE = 2
+    }
+
+    public ShipController controller;
     public Weapon primaryWeapon;
     public Weapon secondaryWeapon;
 
@@ -14,27 +26,45 @@ public class Ship : MonoBehaviour {
 
     public float rotationSpeed;
 
-    public int currHealth;
-    public int maxHealth;
+    [SerializeField]
+    private ShipColor color;
 
-    public void SetColor(Color color)
+    void Start()
     {
-        GetComponent<SpriteRenderer>().color = color;
+        Debug.Log(GetComponent<SpriteRenderer>().color);
+        SetColor(color);
+    }
+
+    void Update()
+    {
+        if (controller) controller.ControllerUpdate(this);
+        Move();
+    }
+
+    public void SetColor(ShipColor color)
+    {
+        this.color = color;
+        GetComponent<SpriteRenderer>().color = COLOR_DEFINIIONS[(int)color];
         primaryWeapon.SetColor(color);
         secondaryWeapon.SetColor(color);
     }
 
-    public Color GetColor()
+    public ShipColor GetColor()
     {
-        return GetComponent<SpriteRenderer>().color;
+        return color;
     }
 
-    protected void ClampSpeed()
+    public void Move()
     {
-        currSpeed = Mathf.Clamp(currSpeed, minSpeed, maxSpeed);
+        transform.Translate(Vector3.up * currSpeed * Time.deltaTime);
     }
 
-    protected void Accelerate()
+    public void Rotate(float rotation)
+    {
+        transform.Rotate(Vector3.forward * rotation * rotationSpeed);
+    }
+
+    public void Accelerate()
     {
         currSpeed += .1f;
         ClampSpeed();
@@ -46,7 +76,7 @@ public class Ship : MonoBehaviour {
         }*/
     }
 
-    protected void Decelerate()
+    public void Decelerate()
     {
         currSpeed -= .1f;
         ClampSpeed();
@@ -55,8 +85,13 @@ public class Ship : MonoBehaviour {
         //rigid.velocity = new Vector2(rigid.velocity.x * 0.98f, rigid.velocity.y * 0.98f);
     }
 
-    protected void TakeDamage(int damage)
+    private void ClampSpeed()
     {
+        currSpeed = Mathf.Clamp(currSpeed, minSpeed, maxSpeed);
+    }
 
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }

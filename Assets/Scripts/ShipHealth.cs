@@ -3,19 +3,46 @@ using System.Collections;
 
 public class ShipHealth : MonoBehaviour {
 
-    void Start () {
-	
+    public GameObject shipExplosion;
+    public int maxHealth;
+
+    private int currHealth;
+
+    void Start ()
+    {
+        currHealth = maxHealth;
 	}
 
-    void Update () {
+    void Update ()
+    {
+
 	}
 
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Projectile"))
         {
-            Debug.Log("got hit by projectile!");
+            BulletBehavior b = collider.gameObject.GetComponent<BulletBehavior>();
+            if (b.GetColor() != gameObject.GetComponent<Ship>().GetColor())
+            {
+                TakeDamage(b.GetDamage());
+            }
+
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currHealth -= damage;
+        if (currHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnDestroy()
+    {
+        Instantiate(shipExplosion, transform.position, Quaternion.identity);
     }
 
 }

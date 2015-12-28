@@ -1,38 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : Ship {
+public class PlayerController : ShipController {
 
-    private Rigidbody2D rigid;
-
-	void Start ()
-    {
-        rigid = GetComponent<Rigidbody2D>();
-        SetColor(Ship.RED);
-    }
-	
-	void Update ()
+	public override void ControllerUpdate(Ship ship)
     {
         if (Input.GetMouseButton(0))
         {
-            primaryWeapon.Fire();
+            ship.primaryWeapon.Fire();
         }
         if (Input.GetMouseButton(1))
         {
-            secondaryWeapon.Fire();
+            ship.secondaryWeapon.Fire();
         }
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.S))
         {
-            Decelerate();
+            ship.Decelerate();
         }
-        float rotation = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.forward * -rotation * rotationSpeed);
+        ship.Rotate(-Input.GetAxis("Horizontal"));
 
         if (Input.GetKey(KeyCode.W))
         {
-            Accelerate();
+            ship.Accelerate();
         }
-        transform.Translate(Vector3.up * currSpeed * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.K))
+        {
+            ship.Destroy();
+        }
+
     }
 }

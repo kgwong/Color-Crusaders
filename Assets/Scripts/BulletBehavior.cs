@@ -8,7 +8,7 @@ public class BulletBehavior : MonoBehaviour {
     public float lifetime;
     public int damage;
 
-    private Color color;
+    private Ship.ShipColor color;
 
 	void Start ()
     {
@@ -23,7 +23,7 @@ public class BulletBehavior : MonoBehaviour {
     {
         if (collider.gameObject.CompareTag("Ship"))
         {
-            Color otherColor = collider.gameObject.GetComponent<Ship>().GetColor();
+            Ship.ShipColor otherColor = collider.gameObject.GetComponent<Ship>().GetColor();
             if (otherColor != color)
             {
                 Die();
@@ -36,12 +36,17 @@ public class BulletBehavior : MonoBehaviour {
         Instantiate(explosionParticles, transform.position, transform.rotation);
     }
 
-    public void SetColor(Color color)
+    public void SetColor(Ship.ShipColor color)
     {
         this.color = color;
     }
 
-    public Color GetColor(Color color)
+    public int GetDamage()
+    {
+        return damage;
+    }
+
+    public Ship.ShipColor GetColor()
     {
         return color;
     }

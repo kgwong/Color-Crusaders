@@ -3,16 +3,16 @@ using System.Collections;
 
 abstract public class Weapon : MonoBehaviour {
 
-    protected Color color;
+    protected Ship.ShipColor color;
 
     public abstract void Fire();
 
-    public void SetColor(Color color)
+    public void SetColor(Ship.ShipColor color)
     {
         this.color = color;
     }
 
-    public Color GetColor()
+    public Ship.ShipColor GetColor()
     {
         return color;
     }
