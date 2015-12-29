@@ -18,14 +18,17 @@ public class StandardBlasters : Weapon
     void Update()
     {
         cooldownTimer -= Time.deltaTime;
-        limitedMouseAim(20.0f);
     }
 
     public override void Fire()
     {
         if (cooldownTimer <= 0)
         {
-            GameObject newBullet = (GameObject)Instantiate(bullet, transform.position, transform.rotation);
+            float variation = VariationFromAccuracy(accuracy); ;
+            float random = Random.Range(-variation, variation);
+            Quaternion finalRotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z + random);
+
+            GameObject newBullet = (GameObject)Instantiate(bullet, transform.position, finalRotation);
             newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * 1000);
             newBullet.GetComponent<BulletBehavior>().SetColor(color);
 

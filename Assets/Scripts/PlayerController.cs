@@ -7,6 +7,7 @@ public class PlayerController : ShipController {
     {
         if (Input.GetMouseButton(0))
         {
+            ship.primaryWeapon.Aim(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             ship.primaryWeapon.Fire();
         }
         if (Input.GetMouseButton(1))
