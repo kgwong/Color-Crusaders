@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum ClockDirecton
+{
+    NONE = 0,
+    CLOCKWISE = -1,
+    COUNTER_CLOCKWISE = 1
+}
+
 public class Ship : MonoBehaviour {
 
     public static Color[] COLOR_DEFINIIONS = new[] 
@@ -16,7 +23,6 @@ public class Ship : MonoBehaviour {
         BLUE = 2
     }
 
-    public ShipController controller;
     public Weapon primaryWeapon;
     public Weapon secondaryWeapon;
 
@@ -29,15 +35,18 @@ public class Ship : MonoBehaviour {
     [SerializeField]
     private ShipColor color;
 
+    private ShipController controller;
+
     void Start()
     {
         Debug.Log(GetComponent<SpriteRenderer>().color);
         SetColor(color);
+
+        controller = gameObject.AddComponent<BasicAIController>();
     }
 
     void Update()
     {
-        if (controller) controller.ControllerUpdate(this);
         Move();
     }
 
@@ -59,6 +68,12 @@ public class Ship : MonoBehaviour {
         transform.Translate(Vector3.up * currSpeed * Time.deltaTime);
     }
 
+    public void Rotate(ClockDirecton clockDirection)
+    {
+        Rotate((int)clockDirection);
+    }
+
+    //Should be between -1 and 1. rotationSpeed handles the speed. 
     public void Rotate(float rotation)
     {
         transform.Rotate(Vector3.forward * rotation * rotationSpeed);
@@ -93,5 +108,12 @@ public class Ship : MonoBehaviour {
     public void Destroy()
     {
         Destroy(gameObject);
+    }
+
+    public void ChangeController<T>() 
+       where T : ShipController
+    {
+        Destroy(controller);
+        controller = gameObject.AddComponent<T>();
     }
 }

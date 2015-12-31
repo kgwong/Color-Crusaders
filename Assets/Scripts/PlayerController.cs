@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : ShipController {
+public class PlayerController : ShipController
+{
+    private Ship ship;
 
-	public override void ControllerUpdate(Ship ship)
+    void Start()
+    {
+        ship = GetComponent<Ship>();
+    }
+
+	void Update()
     {
         if (Input.GetMouseButton(0))
         {
@@ -19,7 +26,7 @@ public class PlayerController : ShipController {
         {
             ship.Decelerate();
         }
-        ship.Rotate(-Input.GetAxis("Horizontal"));
+        //ship.Rotate(GetRotationFromInput());
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -30,6 +37,18 @@ public class PlayerController : ShipController {
         {
             ship.Destroy();
         }
+        if(Input.GetKey(KeyCode.A))
+        {
+            ship.Rotate(ClockDirecton.COUNTER_CLOCKWISE);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            ship.Rotate(ClockDirecton.CLOCKWISE);
+        }
+    }
 
+    private float GetRotationFromInput()
+    {
+        return -Input.GetAxis("Horizontal");
     }
 }

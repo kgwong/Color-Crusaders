@@ -4,16 +4,18 @@ using System;
 
 public class BasicAIController : ShipController
 {
-    public float aimDistance;
+    public float aimDistance = 5.0f;
     public GameObject target;
+
+    private Ship ship;
 
     void Start()
     {
-        target = GameObject.Find("Player");
+        ship = GetComponent<Ship>();
     }
 
 
-    public override void ControllerUpdate(Ship ship)
+    void Update()
     {
         Vector3 diff = target.transform.position - transform.position;
         float rotationZ = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90f;
@@ -21,11 +23,11 @@ public class BasicAIController : ShipController
 
         if (UsefulMath.IsBetween(relativeRotation, 0, 180))
         {
-           ship.Rotate(1);
+           ship.Rotate(ClockDirecton.COUNTER_CLOCKWISE);
         }
         else if (UsefulMath.IsBetween(relativeRotation, 180, 360))
         {
-            ship.Rotate(-1);
+            ship.Rotate(ClockDirecton.CLOCKWISE);
         }
 
         float aimBound1, aimBound2;
