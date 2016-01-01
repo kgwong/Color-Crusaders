@@ -10,7 +10,7 @@ public enum ClockDirecton
 
 public class Ship : MonoBehaviour {
 
-    public static Color[] COLOR_DEFINIIONS = new[] 
+    public static Color[] COLOR_DEFINITIONS = new[] 
     {
         new Color(1f, 0.128f, 0f), //RED
         new Color(1f, 1f, 1f), //WHITE
@@ -53,7 +53,7 @@ public class Ship : MonoBehaviour {
     public void SetColor(ShipColor color)
     {
         this.color = color;
-        GetComponent<SpriteRenderer>().color = COLOR_DEFINIIONS[(int)color];
+        GetComponent<SpriteRenderer>().color = COLOR_DEFINITIONS[(int)color];
         primaryWeapon.SetColor(color);
         secondaryWeapon.SetColor(color);
     }

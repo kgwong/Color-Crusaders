@@ -17,6 +17,15 @@ public class BasicAIController : ShipController
 
     void Update()
     {
+        if (target == null)
+        {
+            target = GetNewTarget();
+            if (target == null)
+            {
+                return;
+            }
+        }
+
         Vector3 diff = target.transform.position - transform.position;
         float rotationZ = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90f;
         float relativeRotation = UsefulMath.NormalizeAngle360(rotationZ - transform.eulerAngles.z);
@@ -56,6 +65,13 @@ public class BasicAIController : ShipController
     private bool InRange(Vector3 target)
     {
         return UsefulMath.DistSquared2D(transform.position, target) < Mathf.Pow(aimDistance, 2);
+    }
+
+    private GameObject GetNewTarget()
+    {
+        GameObject battleManager = GameObject.Find("BattleManager");
+        BattleManager managerComponent = battleManager.GetComponent<BattleManager>();
+        return managerComponent.GetRandomTargetFor(gameObject);
     }
 
 }
