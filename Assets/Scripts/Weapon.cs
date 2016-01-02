@@ -8,7 +8,6 @@ abstract public class Weapon : MonoBehaviour {
 
     //A float from 0 to 1 denoting how the weapon firing can fluctuate
     public float accuracy = 1;
-    protected Ship.ShipColor color;
 
     public static float VariationFromAccuracy(float accuracy)
     {
@@ -17,14 +16,11 @@ abstract public class Weapon : MonoBehaviour {
 
     public abstract void Fire();
 
-    public void SetColor(Ship.ShipColor color)
+    protected void ShootProjectile(GameObject projectile, Vector3 position, Quaternion rotation, float initialForce)
     {
-        this.color = color;
-    }
-
-    public Ship.ShipColor GetColor()
-    {
-        return color;
+        GameObject newProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        newProjectile.GetComponent<Rigidbody2D>().AddForce(newProjectile.transform.up * initialForce);
+        newProjectile.GetComponent<BulletBehavior>().SetOriginShip(transform.parent.gameObject);
     }
 
     public void Aim(Vector3 target)
@@ -41,4 +37,5 @@ abstract public class Weapon : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0f, 0f, 340f + transform.parent.eulerAngles.z);
         }
     }
+
 }

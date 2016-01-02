@@ -9,9 +9,12 @@ public class BasicAIController : ShipController
 
     private Ship ship;
 
+    private BattleManager battleManager;
+
     void Start()
     {
         ship = GetComponent<Ship>();
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
     }
 
 
@@ -19,7 +22,7 @@ public class BasicAIController : ShipController
     {
         if (target == null)
         {
-            target = GetNewTarget();
+            ChangeTarget(GetNewTarget());
             if (target == null)
             {
                 return;
@@ -62,6 +65,17 @@ public class BasicAIController : ShipController
         ship.Accelerate();
     }
 
+    //Called by SendMessage 
+    void OnAttacked(GameObject projectile)
+    {
+        BulletBehavior bulletComponent = projectile.GetComponent<BulletBehavior>();
+        if (bulletComponent)
+        {
+            ChangeTarget(bulletComponent.GetOriginShip()); 
+            //Debug.Log("whoa");
+        }
+    }
+
     private bool InRange(Vector3 target)
     {
         return UsefulMath.DistSquared2D(transform.position, target) < Mathf.Pow(aimDistance, 2);
@@ -69,9 +83,13 @@ public class BasicAIController : ShipController
 
     private GameObject GetNewTarget()
     {
-        GameObject battleManager = GameObject.Find("BattleManager");
-        BattleManager managerComponent = battleManager.GetComponent<BattleManager>();
-        return managerComponent.GetRandomTargetFor(gameObject);
+        //return battleManager.GetRandomTargetFor(gameObject);
+        return battleManager.GetClosestTargetFor(gameObject);
+    }
+
+    private void ChangeTarget(GameObject newTarget)
+    {
+        target = newTarget;
     }
 
 }

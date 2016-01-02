@@ -10,19 +10,6 @@ public enum ClockDirecton
 
 public class Ship : MonoBehaviour {
 
-    public static Color[] COLOR_DEFINITIONS = new[] 
-    {
-        new Color(1f, 0.128f, 0f), //RED
-        new Color(1f, 1f, 1f), //WHITE
-        new Color(0, 0.297f, 1f) //BLUE
-    };
-
-    public enum ShipColor{
-        RED = 0,
-        NEUTRAL = 1,
-        BLUE = 2
-    }
-
     public Weapon primaryWeapon;
     public Weapon secondaryWeapon;
 
@@ -33,7 +20,7 @@ public class Ship : MonoBehaviour {
     public float rotationSpeed;
 
     [SerializeField]
-    private ShipColor color;
+    private Faction.Color color;
 
     private ShipController controller;
 
@@ -50,15 +37,13 @@ public class Ship : MonoBehaviour {
         Move();
     }
 
-    public void SetColor(ShipColor color)
+    public void SetColor(Faction.Color color)
     {
         this.color = color;
-        GetComponent<SpriteRenderer>().color = COLOR_DEFINITIONS[(int)color];
-        primaryWeapon.SetColor(color);
-        secondaryWeapon.SetColor(color);
+        GetComponent<SpriteRenderer>().color = Faction.ToRGB(color);
     }
 
-    public ShipColor GetColor()
+    public Faction.Color GetColor()
     {
         return color;
     }
@@ -76,7 +61,7 @@ public class Ship : MonoBehaviour {
     //Should be between -1 and 1. rotationSpeed handles the speed. 
     public void Rotate(float rotation)
     {
-        transform.Rotate(Vector3.forward * rotation * rotationSpeed);
+        transform.Rotate(Vector3.forward * Mathf.Clamp(rotation, -1, 1) * rotationSpeed);
     }
 
     public void Accelerate()

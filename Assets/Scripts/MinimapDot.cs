@@ -16,7 +16,7 @@ public class MinimapDot : MonoBehaviour {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
 
-        image.color = Ship.COLOR_DEFINITIONS[(int)ship.GetComponent<Ship>().GetColor()];
+        image.color = Faction.ToRGB(ship.GetComponent<Ship>().GetColor());
 	}
 	
 	void Update ()
@@ -39,18 +39,15 @@ public class MinimapDot : MonoBehaviour {
 
     private Vector2 CalcFracShipCoord()
     {
-        Vector2 test = new Vector2(ship.transform.position.x / ScreenWrapBehavior.WRAP_SIZE, 
-                            ship.transform.position.y / ScreenWrapBehavior.WRAP_SIZE);
-
-        return test;
+        return UsefulMath.ToFracCoord(new Vector2(ship.transform.position.x, ship.transform.position.y),
+                                        ScreenWrapBehavior.WRAP_SIZE, ScreenWrapBehavior.WRAP_SIZE);
     }
 
 
     private void SetRectTransformFromFrac(Vector2 frac)
     {
-        transform.localPosition = new Vector3(frac.x * minimapTransform.rect.width,
-                                            frac.y * minimapTransform.rect.height,
-                                            transform.position.z);
+        Vector2 newCoord = UsefulMath.ToAbsCoord(frac, minimapTransform.rect.width, minimapTransform.rect.height);
+        transform.localPosition = new Vector3(newCoord.x, newCoord.y, transform.position.z);
     }
 
 }

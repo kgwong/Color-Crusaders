@@ -40,9 +40,7 @@ public class BurstFireBlasters : Weapon {
             float random = Random.Range(-variation, variation);
             Quaternion finalRotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z + random);
 
-            GameObject newBullet = (GameObject)Instantiate(bullet, transform.position, finalRotation);
-            newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * 1000);
-            newBullet.GetComponent<BulletBehavior>().SetColor(color);
+            ShootProjectile(bullet, transform.position, finalRotation, 1000);
             --burstCount;
             yield return new WaitForSeconds(fireRate);
         }

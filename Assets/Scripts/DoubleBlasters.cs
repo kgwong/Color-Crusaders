@@ -25,14 +25,8 @@ public class DoubleBlasters : Weapon
     {
         if (cooldownTimer <= 0)
         {
-            GameObject newBullet = (GameObject)Instantiate(bullet, transform.position + transform.right * distanceBetweenShots, transform.rotation);
-            newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * 1000);
-            newBullet.GetComponent<BulletBehavior>().SetColor(color);
-
-            GameObject newBullet2 = (GameObject)Instantiate(bullet, transform.position - transform.right * distanceBetweenShots, transform.rotation);
-            newBullet2.GetComponent<Rigidbody2D>().AddForce(newBullet2.transform.up * 1000);
-            newBullet2.GetComponent<BulletBehavior>().SetColor(color);
-
+            ShootProjectile(bullet, transform.position + transform.right * distanceBetweenShots, transform.rotation, 1000);
+            ShootProjectile(bullet, transform.position - transform.right * distanceBetweenShots, transform.rotation, 1000);
             cooldownTimer = fireRate;
         }
     }

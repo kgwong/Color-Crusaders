@@ -26,6 +26,7 @@ public class ShipHealth : MonoBehaviour {
             if (b.GetColor() != gameObject.GetComponent<Ship>().GetColor())
             {
                 TakeDamage(b.GetDamage());
+                SendMessage("OnAttacked", collider.gameObject, SendMessageOptions.DontRequireReceiver);
             }
 
         }

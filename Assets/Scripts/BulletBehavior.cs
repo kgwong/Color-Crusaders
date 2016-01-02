@@ -8,12 +8,13 @@ public class BulletBehavior : MonoBehaviour {
     public float lifetime;
     public int damage;
 
-    private Ship.ShipColor color;
+    private GameObject originShip;
+    private Faction.Color color;
 
 	void Start ()
     {
-        Invoke("Die", lifetime);
-	}
+        Destroy(gameObject, lifetime);
+    }
 	
 	void Update ()
     {
@@ -23,22 +24,13 @@ public class BulletBehavior : MonoBehaviour {
     {
         if (collider.gameObject.CompareTag("Ship"))
         {
-            Ship.ShipColor otherColor = collider.gameObject.GetComponent<Ship>().GetColor();
-            if (otherColor != color)
+            Faction.Color otherColor = collider.gameObject.GetComponent<Ship>().GetColor();
+            if (otherColor != this.color) 
             {
-                Die();
+                Destroy(gameObject);
+                Instantiate(explosionParticles, transform.position, transform.rotation);
             }
         }
-    }
-
-    void OnDestroy()
-    {
-        Instantiate(explosionParticles, transform.position, transform.rotation);
-    }
-
-    public void SetColor(Ship.ShipColor color)
-    {
-        this.color = color;
     }
 
     public int GetDamage()
@@ -46,14 +38,22 @@ public class BulletBehavior : MonoBehaviour {
         return damage;
     }
 
-    public Ship.ShipColor GetColor()
+    public void SetOriginShip(GameObject ship)
     {
-        return color;
+        originShip = ship;
+        //need to store color separately because the ship 
+        //may have been destroyed before the bullet
+        color = ship.GetComponent<Ship>().GetColor();
     }
 
-    private void Die()
+    public GameObject GetOriginShip()
     {
-        Destroy(gameObject);
+        return originShip;
+    }
+
+    public Faction.Color GetColor()
+    {
+        return color;
     }
 
 }
