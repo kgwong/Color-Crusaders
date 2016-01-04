@@ -9,7 +9,7 @@ public class BulletBehavior : MonoBehaviour {
     public int damage;
 
     private GameObject originShip;
-    private Faction.Color color;
+    private Faction faction;
 
 	void Start ()
     {
@@ -24,8 +24,8 @@ public class BulletBehavior : MonoBehaviour {
     {
         if (collider.gameObject.CompareTag("Ship"))
         {
-            Faction.Color otherColor = collider.gameObject.GetComponent<Ship>().GetColor();
-            if (otherColor != this.color) 
+            Faction otherFaction = collider.gameObject.GetComponent<Ship>().GetFaction();
+            if (otherFaction != this.faction) 
             {
                 Destroy(gameObject);
                 Instantiate(explosionParticles, transform.position, transform.rotation);
@@ -41,9 +41,9 @@ public class BulletBehavior : MonoBehaviour {
     public void SetOriginShip(GameObject ship)
     {
         originShip = ship;
-        //need to store color separately because the ship 
+        //need to store faction separately because the ship 
         //may have been destroyed before the bullet
-        color = ship.GetComponent<Ship>().GetColor();
+        faction = ship.GetComponent<Ship>().GetFaction();
     }
 
     public GameObject GetOriginShip()
@@ -51,9 +51,9 @@ public class BulletBehavior : MonoBehaviour {
         return originShip;
     }
 
-    public Faction.Color GetColor()
+    public Faction GetFaction()
     {
-        return color;
+        return faction;
     }
 
 }

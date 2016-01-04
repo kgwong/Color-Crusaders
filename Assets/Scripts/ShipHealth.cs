@@ -8,8 +8,11 @@ public class ShipHealth : MonoBehaviour {
 
     private int currHealth;
 
+    private Faction faction;
+
     void Start ()
     {
+        faction = GetComponent<Ship>().GetFaction();
         currHealth = maxHealth;
 	}
 
@@ -23,7 +26,7 @@ public class ShipHealth : MonoBehaviour {
         if (collider.CompareTag("Projectile"))
         {
             BulletBehavior b = collider.gameObject.GetComponent<BulletBehavior>();
-            if (b.GetColor() != gameObject.GetComponent<Ship>().GetColor())
+            if (b.GetFaction() != this.faction)
             {
                 TakeDamage(b.GetDamage());
                 SendMessage("OnAttacked", collider.gameObject, SendMessageOptions.DontRequireReceiver);

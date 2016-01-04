@@ -4,16 +4,24 @@ using System.Collections;
 public class FollowShip : MonoBehaviour {
 
     public Ship ship;
+    public BattleManager battleManager;
 
     bool running = false;
+    bool initialized = false;
 
     void Start()
     {
-        GetNewShip();
     }
 
     void Update()
     {
+
+        if (!initialized)
+        {
+            GetNewShip();
+            initialized = true;
+        }
+
         if (Input.GetKey(KeyCode.J) && ship)
         {
             ship.ChangeController<PlayerController>();
@@ -36,15 +44,12 @@ public class FollowShip : MonoBehaviour {
 
     private void GetNewShip()
     {
-        GameObject blueFaction = GameObject.Find("BattleManager/Blue Faction");
-        Faction factionComponent = blueFaction.GetComponent<Faction>();
-        if (factionComponent)
+        Faction playerFaction = battleManager.GetPlayerFaction();
+        if (playerFaction == null) return;
+        GameObject randomShip = playerFaction.GetRandomShip();
+        if (randomShip)
         {
-            GameObject randomShip = factionComponent.GetRandomShip();
-            if (randomShip)
-            {
-                ship = randomShip.GetComponent<Ship>();
-            }
+            ship = randomShip.GetComponent<Ship>();
         }
     }
 

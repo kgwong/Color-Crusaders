@@ -18,17 +18,12 @@ public class Ship : MonoBehaviour {
     public float maxSpeed;
 
     public float rotationSpeed;
-
-    [SerializeField]
-    private Faction.Color color;
-
+    
+    public Faction faction;
     private ShipController controller;
 
     void Start()
     {
-        Debug.Log(GetComponent<SpriteRenderer>().color);
-        SetColor(color);
-
         controller = gameObject.AddComponent<BasicAIController>();
     }
 
@@ -37,15 +32,15 @@ public class Ship : MonoBehaviour {
         Move();
     }
 
-    public void SetColor(Faction.Color color)
+    public void SetFaction(Faction faction)
     {
-        this.color = color;
-        GetComponent<SpriteRenderer>().color = Faction.ToRGB(color);
+        this.faction = faction;
+        GetComponent<SpriteRenderer>().color = faction.GetRGB();
     }
 
-    public Faction.Color GetColor()
+    public Faction GetFaction()
     {
-        return color;
+        return faction;
     }
 
     public void Move()

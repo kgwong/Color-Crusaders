@@ -3,44 +3,26 @@ using System.Collections;
 
 public class Faction : MonoBehaviour {
 
-    public enum Color
-    {
-        RED = 0,
-        NEUTRAL = 1,
-        BLUE = 2,
-        BLACK = 3
-    }
-
     public GameObject ship;
-    public Faction.Color color;
+    public Color color;
 
-    private Minimap minimap;
-
-    public static UnityEngine.Color[] COLOR_DEFINITIONS = new[]
-    {
-        new UnityEngine.Color(1f, 0.128f, 0f), //RED
-        UnityEngine.Color.white, //WHITE
-        new UnityEngine.Color(0, 0.297f, 1f), //BLUE,
-        UnityEngine.Color.black
-    };
-
-    public static UnityEngine.Color ToRGB(Faction.Color color)
-    {
-        return COLOR_DEFINITIONS[(int)color];
-    }
+    public Minimap minimap;
 
 	void Start ()
     {
-        minimap = GameObject.Find("Canvas/Minimap").GetComponent<Minimap>();
-        for (int i = 0; i < 20; ++i)
-        {
-            Vector3 randomPosition = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0f);
-            AddShip(ship, randomPosition);
-        }
 	}
 	
 	void Update ()
     {
+    }
+
+    public void Spawn(int n)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            Vector3 randomPosition = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0f);
+            AddShip(ship, randomPosition);
+        }
     }
 
     public void AddShip(GameObject ship, Vector3 position)
@@ -48,8 +30,7 @@ public class Faction : MonoBehaviour {
         GameObject newShip = (GameObject)Instantiate(ship, position, transform.rotation);
         newShip.transform.parent = this.transform;
         Ship shipComponent = newShip.GetComponent<Ship>();
-        shipComponent.SetColor(color);
-
+        shipComponent.SetFaction(this);
         minimap.AddDot(newShip);
     }
 
@@ -66,5 +47,10 @@ public class Faction : MonoBehaviour {
     public int GetNum()
     {
         return transform.childCount;
+    }
+
+    public Color GetRGB()
+    {
+        return color;
     }
 }

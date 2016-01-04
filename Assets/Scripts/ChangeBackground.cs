@@ -7,6 +7,7 @@ public class ChangeBackground : MonoBehaviour {
     private Camera cam;
 
     private float fadeSpeed = .5f;
+    private const float maximumColorPercent = 0.15f;
 
 	void Start ()
     {
@@ -22,24 +23,16 @@ public class ChangeBackground : MonoBehaviour {
 
     private Color GetGoalColor()
     {
-        int numReds = battleManager.redFaction.GetNum();
-        int numBlues = battleManager.blueFaction.GetNum();
-        Faction.Color winningColor = Faction.Color.BLACK;
-        float percWinning = 0.0f;
-
-        if (numReds > numBlues)
+        Faction winning = battleManager.GetWinningFaction();
+        float percWinning = 0f;
+        Color winningColor = Color.black;
+        if (winning != null)
         {
-            percWinning = (numReds - numBlues) / (float)(numBlues + numReds);
-            winningColor = Faction.Color.RED;
-        }
-        else if (numBlues > numReds)
-        {
-            percWinning = (numBlues - numReds) / (float)(numBlues + numReds);
-            winningColor = Faction.Color.BLUE;
+            percWinning = winning.GetNum() / (float)battleManager.GetTotalShips();
+            winningColor = winning.GetRGB();
         }
 
-        const float maximumNonBlack = 0.15f;
-        float lerpAmount = maximumNonBlack * percWinning;
-        return Color.Lerp(Color.black, Faction.ToRGB(winningColor), lerpAmount);
+        float lerpAmount = maximumColorPercent * percWinning;
+        return Color.Lerp(Color.black, winningColor, lerpAmount);
     }
 }

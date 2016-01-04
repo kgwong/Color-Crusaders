@@ -17,7 +17,7 @@ public class Minimap : MonoBehaviour {
     public void AddDot(GameObject ship)
     {
         GameObject newDot = (GameObject) Instantiate(dot, new Vector3(), Quaternion.identity);
-        newDot.transform.parent = this.transform;
+        newDot.transform.SetParent(this.transform);
         MinimapDot script = newDot.GetComponent<MinimapDot>();
         script.ship = ship;
     }

@@ -7,16 +7,14 @@ public class MinimapDot : MonoBehaviour {
     public GameObject ship;
 
     private RectTransform minimapTransform;
-    private RectTransform rectTransform;
     private Image image;
 
     void Start ()
     {
         minimapTransform = transform.parent.gameObject.GetComponent<RectTransform>();
-        rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
 
-        image.color = Faction.ToRGB(ship.GetComponent<Ship>().GetColor());
+        image.color = ship.GetComponent<Ship>().GetFaction().GetRGB();
 	}
 	
 	void Update ()
