@@ -9,10 +9,12 @@ public class StandardBlasters : Weapon
 
     private float cooldownTimer;
 
+    private AudioSource audioSource;
 
     void Start()
     {
         cooldownTimer = fireRate;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -30,6 +32,8 @@ public class StandardBlasters : Weapon
 
             ShootProjectile(bullet, transform.position, finalRotation, 1000);
             cooldownTimer = fireRate;
+
+            audioSource.Play();
         }
     }
 }

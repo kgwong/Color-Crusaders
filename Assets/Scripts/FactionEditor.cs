@@ -13,7 +13,8 @@ public class FactionEditor : MonoBehaviour {
 
     public Settings GetSettings(int index)
     {
-        FactionEditorPanel panel = transform.GetChild(index).GetComponent<FactionEditorPanel>();
+        FactionEditorPanel panel = GetComponentsInChildren<FactionEditorPanel>()[index];
+        //FactionEditorPanel panel = transform.GetChild(index).GetComponent<FactionEditorPanel>();
         Settings s = new Settings();
         s.enabled = panel.enableFaction;
         s.color = panel.color;

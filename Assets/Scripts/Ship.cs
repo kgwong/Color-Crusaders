@@ -56,7 +56,7 @@ public class Ship : MonoBehaviour {
     //Should be between -1 and 1. rotationSpeed handles the speed. 
     public void Rotate(float rotation)
     {
-        transform.Rotate(Vector3.forward * Mathf.Clamp(rotation, -1, 1) * rotationSpeed);
+        transform.Rotate(Vector3.forward * Mathf.Clamp(rotation, -1, 1) * rotationSpeed * Time.deltaTime);
     }
 
     public void Accelerate()
