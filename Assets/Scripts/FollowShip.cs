@@ -10,21 +10,15 @@ public class FollowShip : MonoBehaviour {
     bool initialized = false;
 
     void Start()
-    {
+    {   
     }
 
     void Update()
     {
-
         if (!initialized)
         {
             GetNewShip();
             initialized = true;
-        }
-
-        if (Input.GetKey(KeyCode.J) && ship)
-        {
-            ship.ChangeController<PlayerController>();
         }
     }
 
@@ -38,29 +32,35 @@ public class FollowShip : MonoBehaviour {
         }
         else
         {
-            StartCoroutine("GetNewShipDelay");
+            StartCoroutine("GetNewShipDelay", 2f);
         }
     }
 
-    private void GetNewShip()
+    public Ship GetCurrentShip()
     {
+        return enabled ? ship : null;
+    }
+
+    public IEnumerator GetNewShipDelay(float seconds)
+    {
+        if (!running)
+        {
+            running = true;
+            yield return new WaitForSeconds(seconds);
+            GetNewShip();
+            running = false;
+        }
+    }
+
+    public void GetNewShip()
+    {
+        enabled = true;
         Faction playerFaction = battleManager.GetPlayerFaction();
         if (playerFaction == null) return;
         GameObject randomShip = playerFaction.GetRandomShip();
         if (randomShip)
         {
             ship = randomShip.GetComponent<Ship>();
-        }
-    }
-
-    IEnumerator GetNewShipDelay()
-    {
-        if (!running)
-        {
-            running = true;
-            yield return new WaitForSeconds(2f);
-            GetNewShip();
-            running = false;
         }
     }
 }

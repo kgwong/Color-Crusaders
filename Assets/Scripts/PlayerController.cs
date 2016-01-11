@@ -12,43 +12,47 @@ public class PlayerController : ShipController
 
 	void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (GameInputManager.GetMouseButton(0))
         {
             ship.primaryWeapon.Aim(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             ship.primaryWeapon.Fire();
         }
-        if (Input.GetMouseButton(1))
+        if (GameInputManager.GetMouseButton(1))
         {
             ship.secondaryWeapon.Fire();
         }
 
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.S))
+        if (GameInputManager.GetKey(KeyCode.Space) || GameInputManager.GetKey(KeyCode.S))
         {
             ship.Decelerate();
         }
-        //ship.Rotate(GetRotationFromInput());
-
-        if (Input.GetKey(KeyCode.W))
+        if (GameInputManager.GetKey(KeyCode.W))
         {
             ship.Accelerate();
         }
 
-        if (Input.GetKey(KeyCode.K))
+        if (GameInputManager.GetKey(KeyCode.K))
         {
             ship.Destroy();
         }
-        if(Input.GetKey(KeyCode.A))
+        if(GameInputManager.GetKey(KeyCode.A))
         {
             ship.Rotate(ClockDirecton.COUNTER_CLOCKWISE);
         }
-        if (Input.GetKey(KeyCode.D))
+        if (GameInputManager.GetKey(KeyCode.D))
         {
             ship.Rotate(ClockDirecton.CLOCKWISE);
         }
     }
 
-    private float GetRotationFromInput()
+    void OnDestroy()
     {
-        return -Input.GetAxis("Horizontal");
+        Camera mainCam = Camera.main;
+        if (mainCam)
+        {
+            PlayerCameraControl playerCameraControl = mainCam.gameObject.GetComponent<PlayerCameraControl>();
+            if (playerCameraControl)
+                playerCameraControl.SetSpectatorMode(true);
+        }
     }
 }

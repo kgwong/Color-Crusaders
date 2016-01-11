@@ -4,14 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class PreGameScene : MonoBehaviour {
 
-	public void OnMusicOnToggle(bool value)
+	public void OnSoundToggle(bool value)
     {
-        GlobalSettings.MUSIC_ON = value;
-    }
-
-    public void OnSoundEffectsOnToggle(bool value)
-    {
-        GlobalSettings.SOUND_EFFECTS_ON = value;
+        GlobalSettings.SOUND_ON = value;
     }
 
     public void OnContinuePressed()

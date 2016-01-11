@@ -72,7 +72,6 @@ public class BasicAIController : ShipController
         if (bulletComponent)
         {
             ChangeTarget(bulletComponent.GetOriginShip()); 
-            //Debug.Log("whoa");
         }
     }
 
